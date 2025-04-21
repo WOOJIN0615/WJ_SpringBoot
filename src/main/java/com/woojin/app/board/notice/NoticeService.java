@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.woojin.app.board.BoardFileVO;
@@ -14,6 +15,7 @@ import com.woojin.app.files.FileManager;
 import com.woojin.app.home.util.Pager;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class NoticeService implements BoardService {
 	
 	@Autowired
@@ -61,7 +63,7 @@ public class NoticeService implements BoardService {
 				boardFileVO.setOldName(attach.getOriginalFilename());
 				boardFileVO.setBoardNum(boardVO.getBoardNum());
 				
-				noticeDAO.addFile(boardFileVO);
+				result=noticeDAO.addFile(boardFileVO);
 			}
 		}
 		

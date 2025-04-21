@@ -14,6 +14,6 @@ public interface QnaDAO extends BoardDAO{
 	
 	public void updateHits(QnaVO qnaVO) throws Exception;
 	
-	public int refUpdate(QnaVO qnaVO) throws Exception;
+	public int refUpdate(BoardVO boardVO) throws Exception;
 	
 }

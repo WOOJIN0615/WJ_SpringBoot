@@ -23,8 +23,7 @@
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4">
 						<div class="card-header py-3">
-							<h6 class="m-0 font-weight-bold text-primary">DataTables
-								Example</h6>
+							<h6 class="m-0 font-weight-bold text-primary">데이터베이스 기반</h6>
 						</div>
 						<div class="card-body">
 						<form action="" class="form-inline">

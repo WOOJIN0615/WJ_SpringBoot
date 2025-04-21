@@ -6,14 +6,14 @@
 
 <!-- WINDOWS - PREFERENCES - XML(WILD WEB DEVELOPER - DOWNLOAD EXTER... -->
   	<mapper namespace="com.woojin.app.board.qna.QnaDAO">
-  		<select id="getList" resultType="QnaVO" parameterType="Pager">
+  		<select id="getList" resultType="BoardVO" parameterType="Pager">
   			SELECT * FROM QNA_TBL
   				<include refid="search"></include>
   				ORDER BY BOARD_NUM DESC
   				LIMIT #{startNum}, #{perPage}
   		</select>
   		
-  		<select id="getDetail" resultMap="getImageDetail" parameterType="QnaVO">
+  		<select id="getDetail" resultMap="getImageDetail" parameterType="BoardVO">
 			SELECT * FROM QNA_TBL
 			LEFT OUTER JOIN QNA_FILES_TBL
 			USING(BOARD_NUM)
@@ -48,7 +48,7 @@
   				</foreach>
   		</insert>
   		
-  		<insert id="add" parameterType="QnaVO" keyProperty="boardNum" useGeneratedKeys="true">
+  		<insert id="add" parameterType="BoardVO" keyProperty="boardNum" useGeneratedKeys="true">
   			INSERT INTO QNA_TBL (BOARD_TITLE, BOARD_CONTENTS, BOARD_DATE, BOARD_HIT, USER_NAME, BOARD_REF, BOARD_STEP, BOARD_DEPTH) 
   			VALUES (#{boardTitle}, #{boardContents}, NOW(), 0, 'test', #{boardNum}, 0, 0)
   		</insert>
@@ -80,15 +80,15 @@
   		</where>
   		</sql>
   		
-  		<update id="update" parameterType="QnaVO">
+  		<update id="update" parameterType="BoardVO">
   			UPDATE QNA_TBL SET BOARD_TITLE=#{boardTitle}, BOARD_CONTENTS=#{boardContents} WHERE BOARD_NUM=#{boardNum}
   		</update>
   		
-  		<update id="updateHits" parameterType="QnaVO">
+  		<update id="updateHits" parameterType="BoardVO">
   			UPDATE QNA_TBL SET BOARD_HIT=BOARD_HIT+1 WHERE BOARD_NUM=#{boardNum}
   		</update>
   		
-  		<delete id="delete" parameterType="QnaVO">
+  		<delete id="delete" parameterType="BoardVO">
   			DELETE FROM QNA_TBL WHERE BOARD_NUM=#{boardNum}
   		</delete>
   		
