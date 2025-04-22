@@ -21,15 +21,15 @@
 							<div class="text-center">
 								<h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
 							</div>
-							<form class="user">
+							<form action="" method="post" class="user">
 								<div class="form-group">
 									<input type="text" class="form-control form-control-user"
 										id="exampleInputEmail" aria-describedby="emailHelp"
-										placeholder="ID를 입력하세요.">
+										placeholder="ID를 입력하세요." name="userName">
 								</div>
 								<div class="form-group">
 									<input type="password" class="form-control form-control-user"
-										id="exampleInputPassword" placeholder="Password">
+										id="exampleInputPassword" placeholder="Password" name="password">
 								</div>
 								<div class="form-group">
 									<div class="custom-control custom-checkbox small">
@@ -37,9 +37,9 @@
 										<label class="custom-control-label" for="customCheck">로그인 유지</label>
 									</div>
 								</div>
-								<a href="index.html" class="btn btn-primary btn-user btn-block">
+								<button type="submit" class="btn btn-primary btn-user btn-block">
 									로그인
-								</a>
+								</button>
 								<hr>
 								<a href="index.html" class="btn btn-google btn-user btn-block">
 									<i class="fab fa-google fa-fw"></i> 구글 로그인
@@ -53,7 +53,7 @@
 								<a class="small" href="forgot-password.html">비밀번호 찾기</a>
 							</div>
 							<div class="text-center">
-								<a class="small" href="/join">회원가입</a>
+								<a class="small" href="/user/join">회원가입</a>
 							</div>
 						</div>
 					</div>

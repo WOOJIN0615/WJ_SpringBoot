@@ -14,14 +14,5 @@ public class HomeController {
 		//log.warn("home");
 		return "home";
 	}
-	
-	@GetMapping("login")
-	public String login() throws Exception{
-		return "/login";
-	}
-	
-	@GetMapping("join")
-	public String join() throws Exception{
-		return "/join";
-	}
+
 }

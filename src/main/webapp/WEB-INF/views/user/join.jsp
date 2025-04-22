@@ -21,30 +21,40 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">회원가입</h1>
                             </div>
-                            <form action="" method="post" class="user">
+                            <form action="" method="post" class="user" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <input type="file" class="form-control-file" id="exampleFormControlFile1" name="attach">
+                                </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" id="exampleFirstName"
-                                            placeholder="성">
+                                        <input type="text" class="form-control form-control-user" name="userName" placeholder="아이디">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-user" id="exampleLastName"
-                                            placeholder="이름">
+                                        <input type="text" class="form-control form-control-user" name="name" placeholder="이름">
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="이메일">
-                                </div>
+                                
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="password" class="form-control form-control-user"
-                                            id="exampleInputPassword" placeholder="비밀번호">
+                                            id="exampleInputPassword" placeholder="비밀번호" name="password">
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="password" class="form-control form-control-user"
                                             id="exampleRepeatPassword" placeholder="비밀번호 재입력">
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                                        placeholder="생년월일" name="birth">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                                        placeholder="휴대전화" name="phone">
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail"
+                                        placeholder="이메일" name="email">
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-user btn-block">
                                     회원가입
