@@ -3,6 +3,7 @@ package com.woojin.app.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.woojin.app.files.FileManager;
@@ -19,6 +20,25 @@ public class UserService {
 	@Value("${menu.user.name}")
 	private String kind;
 	
+	public boolean errorCheck(UserVO userVO, BindingResult result) throws Exception{
+		boolean check = false;
+		
+		check = result.hasErrors();
+		
+		if (!userVO.getPassword().equals(userVO.getPasswordCheck())) {
+			check=true;
+			result.rejectValue("passwordCheck", "NotEqual.password");
+		}
+		
+		UserVO checkVO = userDAO.detail(userVO);
+		if (checkVO != null) {
+			check=true;
+			result.rejectValue("userName", "NotEqual.userName");
+		}
+		
+		return check;
+	}
+	
 	public int join(UserVO userVO, MultipartFile attach) throws Exception{
 				String fileName = fileManager.fileSave(attach, path.concat(kind));
 				userVO.setFileName(fileName);
@@ -27,13 +47,19 @@ public class UserService {
 	}
 	
 	public UserVO login(UserVO userVO) throws Exception{
-		userVO = userDAO.login(userVO);
+		userVO = userDAO.detail(userVO);
 		if(userVO != null) {
 			if(userVO.getPassword().equals(userVO.getPassword())) {
 				return userVO;
 			}
 			userVO = null;
 		}
+		return userVO;
+	}
+	
+	public UserVO myPage(UserVO userVO) throws Exception{
+		userVO = userDAO.detail(userVO);
+		
 		return userVO;
 	}
 	

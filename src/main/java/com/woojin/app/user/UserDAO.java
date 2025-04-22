@@ -7,5 +7,5 @@ public interface UserDAO {
 	
 	public int join(UserVO userVO) throws Exception;
 	
-	public UserVO login(UserVO userVO) throws Exception;
+	public UserVO detail(UserVO userVO) throws Exception;
 }

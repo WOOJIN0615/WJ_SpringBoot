@@ -9,7 +9,7 @@
   			VALUES (#{userName}, #{password}, #{name}, #{phone}, #{email}, #{birth}, #{fileName}, #{oriName})
   		</insert>
   		
-		<select id="login" resultType="UserVO" parameterType="UserVO">
+		<select id="detail" resultType="UserVO" parameterType="UserVO">
 			SELECT * FROM USER_TBL WHERE USERNAME=#{userName}
 		</select>
   </mapper>
