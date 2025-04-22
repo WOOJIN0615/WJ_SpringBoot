@@ -14,12 +14,13 @@ public class UserService {
 	private UserDAO userDAO;
 	@Autowired
 	private FileManager fileManager;
-	
 	@Value("${app.files.base}")
 	private String path;
+	@Value("${menu.user.name}")
+	private String kind;
 	
 	public int join(UserVO userVO, MultipartFile attach) throws Exception{
-				String fileName = fileManager.fileSave(attach, path.concat("user"));
+				String fileName = fileManager.fileSave(attach, path.concat(kind));
 				userVO.setFileName(fileName);
 				userVO.setOriName(attach.getOriginalFilename());
 				System.out.println(userVO.getFileName());
@@ -27,8 +28,15 @@ public class UserService {
 	}
 	
 	public UserVO login(UserVO userVO) throws Exception{
+		UserVO result = userDAO.login(userVO);
+		if(result != null) {
+			if(userVO.getPassword().equals(result.getPassword())) {
+				return userVO;
+			}
+			result = null;
+		}
 		System.out.println(userVO.getFileName());
-		return userDAO.login(userVO);
+		return result;
 	}
 	
 }

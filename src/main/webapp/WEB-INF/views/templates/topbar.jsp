@@ -186,7 +186,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">${user.userName}</span>
                                 <img class="img-profile rounded-circle"
-                                    src="/files/user/${user.fileName}">
+                                    src="/files/user/82dcd7f2-941e-4d45-895b-ae31371c42cc_allright.jpg">
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
