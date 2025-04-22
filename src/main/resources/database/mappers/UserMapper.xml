@@ -5,7 +5,7 @@
   
   <mapper namespace="com.woojin.app.user.UserDAO">
   		<insert id="join" parameterType="UserVO">
-  			INSERT INTO USER_TBL (USERNAME, PASSWORD, NAME, PHONE, EMAIL, BIRTH, FILENAME, ORI_NAME)
+  			INSERT INTO USER_TBL (USERNAME, PASSWORD, NAME, PHONE, EMAIL, BIRTH, FILE_NAME, ORI_NAME)
   			VALUES (#{userName}, #{password}, #{name}, #{phone}, #{email}, #{birth}, #{fileName}, #{oriName})
   		</insert>
   		

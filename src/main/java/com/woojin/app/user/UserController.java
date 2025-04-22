@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.woojin.app.files.FileManager;
@@ -39,23 +40,19 @@ public class UserController {
 	}
 	
 	@PostMapping("join")
-	public String join(UserVO userVO, Model model, MultipartFile attach) throws Exception{
+	public String join(UserVO userVO, @RequestParam("attach") MultipartFile attach) throws Exception{
 		int result = userService.join(userVO, attach);
-		System.out.println(userVO.getUserName());
-		System.out.println(userVO.getFileName());
-		model.addAttribute("user", userVO);
 		
 		return "redirect:/";
 	}
 	
 	@GetMapping("login")
-	public String login() throws Exception{
-		return "user/login";
+	public void login() throws Exception{
 	}
 	
 	@PostMapping("login")
 	public String login(HttpSession session, UserVO userVO, Model model) throws Exception {
-		userService.login(userVO);
+		userVO = userService.login(userVO);
 		session.setAttribute("user", userVO);
 		model.addAttribute("user", userVO);
 		return "redirect:/";	

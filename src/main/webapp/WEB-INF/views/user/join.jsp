@@ -27,17 +27,17 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" name="userName" placeholder="아이디">
+                                        <input type="text" class="form-control form-control-user" id="userName" name="userName" placeholder="아이디">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-user" name="name" placeholder="이름">
+                                        <input type="text" class="form-control form-control-user" id="name" name="name" placeholder="이름">
                                     </div>
                                 </div>
                                 
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="password" class="form-control form-control-user"
-                                            id="exampleInputPassword" placeholder="비밀번호" name="password">
+                                            id="password" placeholder="비밀번호" name="password">
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="password" class="form-control form-control-user"
@@ -45,15 +45,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                                    <input type="text" class="form-control form-control-user" id="birth"
                                         placeholder="생년월일" name="birth">
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                                    <input type="text" class="form-control form-control-user" id="phone"
                                         placeholder="휴대전화" name="phone">
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail"
+                                    <input type="email" class="form-control form-control-user" id="email"
                                         placeholder="이메일" name="email">
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-user btn-block">

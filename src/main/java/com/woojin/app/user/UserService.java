@@ -23,20 +23,18 @@ public class UserService {
 				String fileName = fileManager.fileSave(attach, path.concat(kind));
 				userVO.setFileName(fileName);
 				userVO.setOriName(attach.getOriginalFilename());
-				System.out.println(userVO.getFileName());
 			return userDAO.join(userVO);
 	}
 	
 	public UserVO login(UserVO userVO) throws Exception{
-		UserVO result = userDAO.login(userVO);
-		if(result != null) {
-			if(userVO.getPassword().equals(result.getPassword())) {
+		userVO = userDAO.login(userVO);
+		if(userVO != null) {
+			if(userVO.getPassword().equals(userVO.getPassword())) {
 				return userVO;
 			}
-			result = null;
+			userVO = null;
 		}
-		System.out.println(userVO.getFileName());
-		return result;
+		return userVO;
 	}
 	
 }
