@@ -27,7 +27,7 @@
 					<spring:message code="hi" text="안녕하세요"></spring:message>
 					</p>
 					
-					<spring:message code="welcome.login" arguments="${user.userName},${user.name}" argumentSeparator=","></spring:message>
+					<spring:message code="welcome.login" arguments="${user.username},${user.name}" argumentSeparator=","></spring:message>
 				</div>
 			</div>
 			<!-- End Content -->

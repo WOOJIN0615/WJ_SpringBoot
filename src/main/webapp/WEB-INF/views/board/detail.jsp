@@ -33,7 +33,7 @@
 					</div>
 					<div style="width: 500px;">
 						<ui class="post_info">
-							<li>작성자 : ${dto.userName}</li>
+							<li>작성자 : ${dto.username}</li>
 							<li>${dto.boardDate}</li>
 							<li>조회 : ${dto.boardHit}</li>
 						</ui>

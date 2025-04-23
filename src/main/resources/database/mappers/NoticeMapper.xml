@@ -26,7 +26,7 @@
   			<result column="BOARD_CONTENTS" property="boardContents"/>
   			<result column="BOARD_DATE" property="boardDate"/>
   			<result column="BOARD_HIT" property="boardHit"/>
-  			<result column="USER_NAME" property="userName"/>
+  			<result column="USER_NAME" property="username"/>
   			<collection property="boardFileVOs" javaType="List" ofType="BoardFileVO">
   				<id column="FILE_NAME" property="fileName"/>
   				<result column="OLD_NAME" property="oldName"/>
@@ -44,7 +44,7 @@
   			<!-- 다중 insert -->
 	  			INSERT INTO NOTICE_TBL (BOARD_TITLE, BOARD_CONTENTS, BOARD_DATE, BOARD_HIT, USER_NAME) VALUES 
   				<foreach collection="list" item="list" open="" separator=",">
-	  				(#{list.boardTitle}, #{list.boardContents}, NOW(), 0, #{list.userName})			
+	  				(#{list.boardTitle}, #{list.boardContents}, NOW(), 0, #{list.username})			
   				</foreach>
   		</insert>
   		

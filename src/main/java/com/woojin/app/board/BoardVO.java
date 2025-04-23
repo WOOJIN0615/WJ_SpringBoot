@@ -18,7 +18,7 @@ public class BoardVO {
 	private String boardContents;
 	private Date boardDate;
 	private Long boardHit;
-	private String userName;
+	private String username;
 	private List<BoardVO> boardFileVOs;
 
 }

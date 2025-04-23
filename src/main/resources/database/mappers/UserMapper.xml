@@ -6,10 +6,32 @@
   <mapper namespace="com.woojin.app.user.UserDAO">
   		<insert id="join" parameterType="UserVO">
   			INSERT INTO USER_TBL (USERNAME, PASSWORD, NAME, PHONE, EMAIL, BIRTH, FILE_NAME, ORI_NAME)
-  			VALUES (#{userName}, #{password}, #{name}, #{phone}, #{email}, #{birth}, #{fileName}, #{oriName})
+  			VALUES (#{username}, #{password}, #{name}, #{phone}, #{email}, #{birth}, #{fileName}, #{oriName})
   		</insert>
   		
-		<select id="detail" resultType="UserVO" parameterType="UserVO">
-			SELECT * FROM USER_TBL WHERE USERNAME=#{userName}
+		<select id="detail" resultMap="getRoleDetail" parameterType="UserVO">
+			SELECT * FROM ROLE_TBL R
+			JOIN
+			(
+				SELECT * FROM USER_TBL U
+				JOIN MEMBER_ROLE_TBL M
+				USING(USERNAME)
+			) E
+			USING(ROLE_NUM) WHERE E.USERNAME=#{username}
 		</select>
+		
+		<resultMap type="UserVO" id="getRoleDetail">
+			<id column="USERNAME" property="username"/>
+			<result column="PASSWORD" property="password"/>
+			<result column="NAME" property="name"/>
+			<result column="PHONE" property="phone"/>
+			<result column="EMAIL" property="email"/>
+			<result column="BIRTH" property="birth"/>
+			<result column="FILENAME" property="fileName"/>
+			<result column="OLDNAME" property="oldName"/>
+			<collection property="list" javaType="java.util.List" ofType="RoleVO">
+				<id column="ROLE_NUM" property="roleNum"/>
+				<result column="ROLE_NAME" property="roleName"/>
+			</collection>
+		</resultMap>
   </mapper>

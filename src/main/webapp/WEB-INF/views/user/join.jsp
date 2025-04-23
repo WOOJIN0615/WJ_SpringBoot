@@ -28,9 +28,9 @@
                                 </div>
                                 <div class="form-group row" style="margin-top: 8px; margin-bottom: 8px;">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <form:input type="text" class="form-control form-control-user" id="userName" path="userName" placeholder="아이디"></form:input>
+                                        <form:input type="text" class="form-control form-control-user" id="username" path="username" placeholder="아이디"></form:input>
                                         <div style="margin-top: 8px;">
-                                        	<form:errors path="userName"></form:errors>
+                                        	<form:errors path="username"></form:errors>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">

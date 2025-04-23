@@ -59,16 +59,7 @@ public class UserController {
 	}
 	
 	@GetMapping("login")
-	public void login() throws Exception{
-	}
-	
-	@PostMapping("login")
-	public String login(HttpSession session, UserVO userVO, Model model) throws Exception {
-		userVO = userService.login(userVO);
-		session.setAttribute("user", userVO);
-		model.addAttribute("user", userVO);
-		return "redirect:/";	
-	}
+	public void login() throws Exception{}
 	
 	@GetMapping("logout")
 	public String logout(HttpSession session) throws Exception{

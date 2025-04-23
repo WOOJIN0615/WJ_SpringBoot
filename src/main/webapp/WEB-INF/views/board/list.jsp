@@ -57,7 +57,7 @@
 										<c:forEach items="${list}" var="l">
 											<tr onclick="location.href='detail?boardNum=${l.boardNum}'">
 												<td>${l.boardNum}</td>
-												<td>${l.userName}</td>
+												<td>${l.username}</td>
 												<td>${l.boardTitle}</td>
 												<td>${l.boardDate}</td>
 												<td>${l.boardHit}</td>

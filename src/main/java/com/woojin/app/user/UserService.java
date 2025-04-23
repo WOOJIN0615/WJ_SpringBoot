@@ -2,15 +2,38 @@ package com.woojin.app.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.woojin.app.files.FileManager;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
-public class UserService {
+@Slf4j
+public class UserService implements UserDetailsService {
 	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+			UserVO userVO = new UserVO();
+			userVO.setUsername(username);
+			try {
+				userVO = userDAO.detail(userVO);
+				log.info("{}", userVO);
+			} catch (Exception e) {
+				e.printStackTrace();
+				userVO = null;
+			}
+		return userVO;
+	}
+	
+	@Autowired
+	private PasswordEncoder encoder;
 	@Autowired
 	private UserDAO userDAO;
 	@Autowired
@@ -33,7 +56,7 @@ public class UserService {
 		UserVO checkVO = userDAO.detail(userVO);
 		if (checkVO != null) {
 			check=true;
-			result.rejectValue("userName", "NotEqual.userName");
+			result.rejectValue("username", "NotEqual.username");
 		}
 		
 		return check;
@@ -43,6 +66,7 @@ public class UserService {
 				String fileName = fileManager.fileSave(attach, path.concat(kind));
 				userVO.setFileName(fileName);
 				userVO.setOriName(attach.getOriginalFilename());
+				userVO.setPassword(encoder.encode(userVO.getPassword()));
 			return userDAO.join(userVO);
 	}
 	
@@ -50,6 +74,7 @@ public class UserService {
 		userVO = userDAO.detail(userVO);
 		if(userVO != null) {
 			if(userVO.getPassword().equals(userVO.getPassword())) {
+				log.info("{}", userVO);
 				return userVO;
 			}
 			userVO = null;
