@@ -10,7 +10,7 @@ import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity //(debug = true)
 public class SecurityConfig {
 	
 	@Bean

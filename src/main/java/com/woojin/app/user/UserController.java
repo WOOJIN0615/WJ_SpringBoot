@@ -1,7 +1,11 @@
 package com.woojin.app.user;
 
+import java.util.Enumeration;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -70,7 +74,15 @@ public class UserController {
 	}
 	
 	@GetMapping("myPage")
-	public String myPage(UserVO userVO, Model model) throws Exception{
+	public String myPage(UserVO userVO, HttpSession session) throws Exception{
+		Enumeration<String> e = session.getAttributeNames();
+		while(e.hasMoreElements()) {
+		}
+		Object obj=session.getAttribute("SPRING_SECURITY_CONTEXT");
+		SecurityContextImpl impl = (SecurityContextImpl)obj;
+		
+		Authentication authen = impl.getAuthentication();
+		log.info("{}", authen.getPrincipal());
 		return "user/myPage";
 	}
 	
@@ -79,7 +91,7 @@ public class UserController {
 		return "user/update";
 	}
 	
-	@PostMapping("update")
+	@PostMapping("myPage")
 	public String update(@Validated(UpdateGroup.class) UserVO userVO, Model model) throws Exception{
 		return "redirect:/user/mypage";
 	}

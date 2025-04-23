@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -85,9 +86,11 @@
 								  </ul>
 								</nav>					
 							</div>
-							<div style="display: flex; justify-content: end;">
-								<a href="add" class="btn btn-primary mb-2">글쓰기</a>
-							</div>
+							<sec:authorize access="hasRole('ADMIN')">
+								<div style="display: flex; justify-content: end;">
+									<a href="add" class="btn btn-primary mb-2">글쓰기</a>
+								</div>
+							</sec:authorize>
 
 						</div>
 					</div>
