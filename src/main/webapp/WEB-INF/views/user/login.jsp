@@ -24,6 +24,7 @@
 								<h3><spring:message code="${code}"></spring:message>${param.message}</h3>
 							</div>
 							<form action="" method="post" class="user">
+							<input type="hidden" value="${_csrf.token}" name="${_csrf_parameterName}"/>
 								<div class="form-group">
 									<input type="text" class="form-control form-control-user"
 										id="exampleInputEmail" aria-describedby="emailHelp"
