@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,6 +17,7 @@
 			<div id="content">
 			<c:import url="/WEB-INF/views/templates/topbar.jsp"></c:import>
 				<div class="container-fluid" style="display: flex; justify-content: center;">
+				<sec:authentication property="principal" var="user"/>
 					<!-- contents -->
                     <div class="col-lg-7">
                         <div class="p-5">
@@ -23,14 +25,20 @@
                                 <h1 class="h4 text-gray-900 mb-4">정보 수정</h1>
                             </div>
                             <form:form action="" modelAttribute="userVO" method="post" cssClass="user" enctype="multipart/form-data">
+                            	<div class="form-group row" style="display: flex; justify-content: center;">
+                            		<a href="#" class="avatar rounded-circle">
+										<img class="img-profile rounded-circle"
+										src="/files/user/${user.fileName}" style="width: 100px; height: 100px;">
+									</a>
+								</div>
                                 <div class="form-group">
                                     <input type="file" class="form-control-file" id="exampleFormControlFile1" name="attach">
                                 </div>
                                 <div class="form-group row" style="margin-top: 8px; margin-bottom: 8px;">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <form:input type="text" class="form-control form-control-user" id="userName" path="userName" value="${user.userName}"></form:input>
+                                        <form:input type="text" class="form-control form-control-user" id="username" path="username" value="${user.username}"></form:input>
                                         <div style="margin-top: 8px;">
-                                        	<form:errors path="userName"></form:errors>
+                                        	<form:errors path="username"></form:errors>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -44,7 +52,7 @@
                                 <div class="form-group row" style="margin-top: 8px; margin-bottom: 8px;">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <form:password class="form-control form-control-user"
-                                            id="password" placeholder="비밀번호" path="password"/>
+                                            id="password" placeholder="새 비밀번호" path="password"/>
                                         <div style="margin-top: 8px;">
                                         	<form:errors path="password"></form:errors>
                                         </div>

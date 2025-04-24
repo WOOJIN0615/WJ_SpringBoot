@@ -62,11 +62,17 @@ public class UserService implements UserDetailsService {
 		return check;
 	}
 	
-	public int join(UserVO userVO, MultipartFile attach) throws Exception{
-				String fileName = fileManager.fileSave(attach, path.concat(kind));
-				userVO.setFileName(fileName);
-				userVO.setOriName(attach.getOriginalFilename());
-				userVO.setPassword(encoder.encode(userVO.getPassword()));
+	public int join(UserVO userVO, MultipartFile attach) throws Exception{		
+		if (attach.equals(null)) {
+			userVO.setFileName(null);
+			userVO.setOriName(null);
+			return userDAO.join(userVO);
+		}else {
+			String fileName = fileManager.fileSave(attach, path.concat(kind));
+			userVO.setFileName(fileName);
+			userVO.setOriName(attach.getOriginalFilename());
+		}
+		userVO.setPassword(encoder.encode(userVO.getPassword()));
 			return userDAO.join(userVO);
 	}
 	

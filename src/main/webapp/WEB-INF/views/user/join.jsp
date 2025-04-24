@@ -24,7 +24,7 @@
                             </div>
                             <form:form action="" modelAttribute="userVO" method="post" cssClass="user" enctype="multipart/form-data">
                                 <div class="form-group">
-                                    <input type="file" class="form-control-file" id="exampleFormControlFile1" name="attach">
+                                    <input type="file" class="form-control-file" id="attach" name="attach">
                                 </div>
                                 <div class="form-group row" style="margin-top: 8px; margin-bottom: 8px;">
                                     <div class="col-sm-6 mb-3 mb-sm-0">

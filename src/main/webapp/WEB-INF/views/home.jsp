@@ -13,6 +13,7 @@
 <body id="page-top">
 	<div id="wrapper">
 		<c:import url="./templates/sidebar.jsp"></c:import>
+		<sec:authentication property="principal" var="user"/>
 		<div id="content-wrapper" class="d-flex flex-column">
 			<div id="content">
 			<c:import url="./templates/topbar.jsp"></c:import>
@@ -30,8 +31,9 @@
 					<p>
 					<spring:message code="hi" text="안녕하세요"></spring:message>
 					</p>
-					
-					<spring:message code="welcome.login" arguments="${user.username},${user.name}" argumentSeparator=","></spring:message>
+					<sec:authorize access="isAuthenticated()">
+						<spring:message code="welcome.login" arguments="${user.username},${user.name}" argumentSeparator=","></spring:message>
+					</sec:authorize>
 				</div>
 			</div>
 			<!-- End Content -->

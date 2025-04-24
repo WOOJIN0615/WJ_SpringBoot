@@ -1,17 +1,28 @@
 package com.woojin.app.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
 
+import com.woojin.app.user.UserService;
+
 @Configuration
 @EnableWebSecurity //(debug = true)
 public class SecurityConfig {
+	
+	@Autowired
+	private SecurityLoginSuccessHandler loginHandler;
+	@Autowired
+	private SecurityLoginFailHandler failureHandler;
+	@Autowired
+	private UserService userService;
 	
 	@Bean
 	HttpFirewall firewall() {
@@ -51,8 +62,10 @@ public class SecurityConfig {
 			//파라미터 이름을 지정할 수 있음.
 			//.usernameParameter("userID")
 			//.passwordParameter("pw")
-			.defaultSuccessUrl("/")
-			.failureUrl("/user/login")
+			//.defaultSuccessUrl("/")
+			.successHandler(loginHandler)
+			.failureHandler(failureHandler)
+			//.failureUrl("/user/login")
 			.permitAll();
 		})
 		
@@ -65,9 +78,25 @@ public class SecurityConfig {
 			.permitAll();
 		})
 		
+		.rememberMe(rememberMe ->{
+			rememberMe
+			.rememberMeParameter("remember-me")
+			.tokenValiditySeconds(60) //사용자 쿠키에 얼마동안 저장할 것인가
+			.key("rememberKey")
+			.userDetailsService(userService)
+			.authenticationSuccessHandler(loginHandler)
+			.useSecureCookie(false);
+		})
+		
+		.sessionManagement(s->{
+			s.invalidSessionUrl("/")
+			.maximumSessions(1)
+			.maxSessionsPreventsLogin(true)
+			.expiredUrl("/");
+			s.sessionFixation().changeSessionId();
+		})
+		
 		;
-		
-		
 		return security.build();
 	}
 	

@@ -5,6 +5,7 @@ import java.util.Enumeration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,36 +64,33 @@ public class UserController {
 	}
 	
 	@GetMapping("login")
-	public void login() throws Exception{}
-	
-	@GetMapping("logout")
-	public String logout(HttpSession session) throws Exception{
-		session.setAttribute("user", null);
-		session.removeAttribute("user");
-		session.invalidate();
-		return "redirect:/";
-	}
-	
-	@GetMapping("myPage")
-	public String myPage(UserVO userVO, HttpSession session) throws Exception{
-		Enumeration<String> e = session.getAttributeNames();
-		while(e.hasMoreElements()) {
+	public String login(@AuthenticationPrincipal UserVO userVO) throws Exception{
+		if (userVO != null) {
+			return "redirect:/";
 		}
-		Object obj=session.getAttribute("SPRING_SECURITY_CONTEXT");
-		SecurityContextImpl impl = (SecurityContextImpl)obj;
 		
-		Authentication authen = impl.getAuthentication();
-		log.info("{}", authen.getPrincipal());
-		return "user/myPage";
+		return "user/login";
 	}
 	
 	@GetMapping("update")
-	public String update(@ModelAttribute UserVO userVO) throws Exception{
-		return "user/update";
+	public void update(UserVO userVO, HttpSession session) throws Exception{
+//		Enumeration<String> e = session.getAttributeNames();
+//		while(e.hasMoreElements()) {
+//		}
+//		Object obj=session.getAttribute("SPRING_SECURITY_CONTEXT");
+//		SecurityContextImpl impl = (SecurityContextImpl)obj;
+//		
+//		Authentication authen = impl.getAuthentication();
+		//log.info("{}", authen);
 	}
 	
-	@PostMapping("myPage")
-	public String update(@Validated(UpdateGroup.class) UserVO userVO, Model model) throws Exception{
-		return "redirect:/user/mypage";
+	@PostMapping("update")
+	public void update(@Validated(UpdateGroup.class) UserVO userVO, Model model) throws Exception{
 	}
+	
+	@GetMapping("myPage")
+	public void myPage() {
+		
+	}
+	
 }
