@@ -42,15 +42,14 @@ public class UserSocialService extends DefaultOAuth2UserService {
 		
 		OAuth2User user=super.loadUser(request);
 		Map<String, Object> map=(Map<String, Object>)user.getAttributes().get("properties");
-		
+		log.info("sns : {}", request.getClientRegistration().getRegistrationId());
 		UserVO userVO = new UserVO();
 		userVO.setAttributes(user.getAttributes());
 		userVO.setUsername(user.getAttribute("id").toString());
 		userVO.setFileName(map.get("thumbnail_image").toString());
 		userVO.setName(map.get("nickname").toString());
-		userVO.setAccessToken(request.getAccessToken().toString());
+		userVO.setAccessToken(request.getAccessToken().getTokenValue());
 		userVO.setSns(request.getClientRegistration().getRegistrationId());
-		
 		
 		List<RoleVO> list = new ArrayList<>();
 		RoleVO roleVO = new RoleVO();
@@ -62,6 +61,7 @@ public class UserSocialService extends DefaultOAuth2UserService {
 		try {
 			if (userDAO.detail(userVO)==null) {
 				userDAO.join(userVO);
+				System.out.println(userVO.getSns());
 			}else {
 				
 			}

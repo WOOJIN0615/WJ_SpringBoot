@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
@@ -16,11 +17,14 @@ import org.springframework.security.web.session.SessionManagementFilter;
 
 import com.woojin.app.user.UserService;
 import com.woojin.app.user.UserSocialService;
+import com.woojin.app.user.UserVO;
 
 @Configuration
 @EnableWebSecurity//(debug = true)
 public class SecurityConfig {
 	
+	@Autowired
+	private SecurityLogoutHandler logoutHandler;
 	@Autowired
 	private SecurityLoginSuccessHandler loginHandler;
 	@Autowired
@@ -29,6 +33,8 @@ public class SecurityConfig {
 	private UserService userService;
 	@Autowired
 	private UserSocialService userSocial;
+	@Autowired
+	private SecurityLogoutSuccessHandler logoutSuccess;
 	
 	@Bean
 	HttpFirewall firewall() {
@@ -79,7 +85,8 @@ public class SecurityConfig {
 		.logout(logout ->{
 			logout
 			.logoutUrl("/user/logout")
-			.logoutSuccessUrl("/")
+			.logoutSuccessHandler(logoutSuccess)
+			.addLogoutHandler(logoutHandler)
 			.invalidateHttpSession(true)
 			.permitAll();
 		})
@@ -108,6 +115,8 @@ public class SecurityConfig {
 				use.userService(userSocial);
 			});
 		})
+		
+		
 		
 		;
 		return security.build();
