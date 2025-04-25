@@ -15,9 +15,10 @@ import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.session.SessionManagementFilter;
 
 import com.woojin.app.user.UserService;
+import com.woojin.app.user.UserSocialService;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity//(debug = true)
 public class SecurityConfig {
 	
 	@Autowired
@@ -26,6 +27,8 @@ public class SecurityConfig {
 	private SecurityLoginFailHandler failureHandler;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private UserSocialService userSocial;
 	
 	@Bean
 	HttpFirewall firewall() {
@@ -97,6 +100,13 @@ public class SecurityConfig {
 			.maxSessionsPreventsLogin(true)
 			.expiredUrl("/");
 			s.sessionFixation().changeSessionId();
+		})
+		
+		.oauth2Login(oauth2Login ->{
+			oauth2Login
+			.userInfoEndpoint(use->{
+				use.userService(userSocial);
+			});
 		})
 		
 		;

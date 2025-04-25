@@ -44,8 +44,8 @@
 									로그인
 								</button>
 								<hr>
-								<a href="index.html" class="btn btn-google btn-user btn-block">
-									<i class="fab fa-google fa-fw"></i> 구글 로그인
+								<a href="/oauth2/authorization/kakao" class="btn btn-warning btn-user btn-block">
+									<i class="fab fa-google fa-fw"></i> 카카오 로그인
 								</a>
 								<a href="index.html" class="btn btn-facebook btn-user btn-block">
 									<i class="fab fa-facebook-f fa-fw"></i> 페이스북 로그인

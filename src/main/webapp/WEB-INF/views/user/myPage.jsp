@@ -44,8 +44,13 @@
 								  <div class="col-auto">
 									<!-- Avatar -->
 									<a href="#" class="avatar rounded-circle">
+	                                <c:if test="${not empty user.sns}">
+	                                	<img class="img-profile rounded-circle" src="${user.fileName}" style="width: 100px; height: 100px">
+	                                </c:if>
+	                                <c:if test="${empty user.sns}">
 										<img class="img-profile rounded-circle"
-										src="/files/user/${user.fileName}" style="width: 50px; height: 50px;">
+											src="/files/user/${user.fileName}" style="width: 100px; height: 100px">
+	                                </c:if>
 									</a>
 								  </div>
 								  <div class="col ml-md-n2">

@@ -5,10 +5,12 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -21,7 +23,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class UserVO implements UserDetails {
+public class UserVO implements UserDetails, OAuth2User {
 	
 	//UserDetails : getusername, getpassword, getAuthorites
 	
@@ -48,6 +50,16 @@ public class UserVO implements UserDetails {
 	private boolean enabled;
 	
 	private List<RoleVO> list;
+	
+	//OAuth2User////////////////////////////////////////////////////////////////
+	
+	private Map<String, Object> attributes;
+	
+	private String accessToken;
+	
+	private String sns;
+	
+	//OAuth2User////////////////////////////////////////////////////////////////
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -60,7 +72,7 @@ public class UserVO implements UserDetails {
 		}
 		return ar;
 	}
-	
+
 	//pw가 틀렸을 경우 - BadCredentialException : 자격 증명에 실패하였습니다.
 	//id가 틀렸을 경우 - InternalAuthenticationServiceException
 

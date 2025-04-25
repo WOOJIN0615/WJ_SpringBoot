@@ -27,8 +27,13 @@
                             <form:form action="" modelAttribute="userVO" method="post" cssClass="user" enctype="multipart/form-data">
                             	<div class="form-group row" style="display: flex; justify-content: center;">
                             		<a href="#" class="avatar rounded-circle">
+	                                <c:if test="${not empty user.sns}">
+	                                	<img class="img-profile rounded-circle" src="${user.fileName}" style="width: 100px; height: 100px">
+	                                </c:if>
+	                                <c:if test="${empty user.sns}">
 										<img class="img-profile rounded-circle"
-										src="/files/user/${user.fileName}" style="width: 100px; height: 100px;">
+											src="/files/user/${user.fileName}" style="width: 100px; height: 100px">
+	                                </c:if>
 									</a>
 								</div>
                                 <div class="form-group">
