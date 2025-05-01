@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.woojin.app.websocket.ChatDAO">
+  		<select id="getList" resultType="UserVO">
+  			SELECT USERNAME, NAME, FILE_NAME, SNS, STATUS FROM USER_TBL
+  		</select>
+  		
+  		<select id="getChat" parameterType="MessageVO" resultType="MessageVO">
+  			SELECT * FROM CHAT_TBL WHERE SENDER=#{sender} AND RECEIVER=#{receiver} OR SENDER=#{receiver} AND RECEIVER=#{sender}
+  		</select>
+  		
+  		<insert id="makeRoom" parameterType="MessageVO">
+  			INSERT INTO CHAT_TBL (ROOM_NUM, SENDER, RECEIVER, BODY, CHATDATE) VALUES (#{roomNum}, #{sender}, #{receiver}, null, NOW())
+  		</insert>
+  		  	<insert id="add" parameterType="java.util.List">
+	  		INSERT INTO CHAT_TBL
+	  		(
+	  			CHAT_NUM, ROOM_NUM, SENDER, RECEIVER, BODY, CHAT_TIME
+	  		)
+	  		
+	  		VALUES 
+	  		
+	  		<foreach collection="list" item="vo" open="" separator="," close="">
+	  			(null, #{vo.roomNum}, #{vo.sender}, #{vo.receiver}, #{vo.body}, now(), #{status})
+	  		</foreach>
+	  	
+	  	</insert>
+	  	  <select id="getMemoList" parameterType="MessageVO" resultType="MessageVO">
+		  	SELECT * FROM CHAT_TBL
+		  	WHERE RECEIVER=#{receiver} AND STATUS='3' AND READ_STATUS=0
+		  	ORDER BY CHAT_NUM DESC
+		  </select>
+  </mapper>

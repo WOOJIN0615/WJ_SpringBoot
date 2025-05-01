@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.woojin.app.user.UserDAO;
 import com.woojin.app.user.UserVO;
+import com.woojin.app.websocket.LoginUsers;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +33,10 @@ public class SecurityLogoutSuccessHandler implements LogoutSuccessHandler {
 	private String restKey;
 	@Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
 	private String redirect;
+	
+	@Autowired
+	private UserDAO userDAO;
+	
 	@Override
 	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
 			throws IOException, ServletException {
