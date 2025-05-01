@@ -7,7 +7,6 @@ const chatBody = document.getElementById("chat-body");
 const chat = document.getElementById("chat")
 
 try {
-    
     const memoSend = document.getElementById("memoSend");
     const memoContents = document.getElementById("memoContents");
     const memoReceiver = document.getElementById("memoReceiver");

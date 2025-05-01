@@ -44,7 +44,7 @@ public class NoticeController {
 		model.addAttribute("list", ar);
 		model.addAttribute("pager", pager);
 		
-		return "/board/list";
+		return "board/list";
 	}
 	
 	@GetMapping("detail")

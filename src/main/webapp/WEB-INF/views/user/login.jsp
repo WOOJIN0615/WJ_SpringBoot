@@ -23,7 +23,7 @@
 								<h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
 								<h3><spring:message code="${code}"></spring:message>${param.message}</h3>
 							</div>
-							<form action="" method="post" class="user">
+							<form action="/users/login" method="post" class="user" enctype="multipart/form-data">
 							<input type="hidden" value="${_csrf.token}" name="${_csrf_parameterName}"/>
 								<div class="form-group">
 									<input type="text" class="form-control form-control-user"
