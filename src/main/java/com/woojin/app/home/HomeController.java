@@ -30,6 +30,9 @@ public class HomeController {
 			session.setAttribute("memoList", list);
 		}
 		//log.warn("home");
+		if (userVO == null) {
+			throw new NullPointerException();
+		}
 		return "home";
 	}
 

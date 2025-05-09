@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -95,6 +96,13 @@ public class NoticeController {
 		model.addAttribute("result", s);
 		
 		return "commons/result";
+	}
+	
+	@ExceptionHandler(exception = NullPointerException.class)
+	public String exceptionHandler() {
+		System.out.println("Notice Exception");
+			
+		return "jsp 경로";
 	}
 	
 
