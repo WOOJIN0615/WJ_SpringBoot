@@ -17,7 +17,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 		// TODO Auto-generated method stub
-		System.out.println("========= CHat Handler ========");
+		System.out.println("========= Chat Handler ========");
 		registry.addHandler(chatHandler, "/ws/chat").setAllowedOrigins("*");
 	}
 

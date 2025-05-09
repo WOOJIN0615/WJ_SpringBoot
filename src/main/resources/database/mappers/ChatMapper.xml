@@ -15,7 +15,8 @@
   		<insert id="makeRoom" parameterType="MessageVO">
   			INSERT INTO CHAT_TBL (ROOM_NUM, SENDER, RECEIVER, BODY, CHATDATE) VALUES (#{roomNum}, #{sender}, #{receiver}, null, NOW())
   		</insert>
-  		  	<insert id="add" parameterType="java.util.List">
+  		
+	 	<insert id="add" parameterType="java.util.List">
 	  		INSERT INTO CHAT_TBL
 	  		(
 	  			CHAT_NUM, ROOM_NUM, SENDER, RECEIVER, BODY, CHAT_TIME

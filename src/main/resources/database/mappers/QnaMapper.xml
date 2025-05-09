@@ -50,7 +50,7 @@
   		
   		<insert id="add" parameterType="BoardVO" keyProperty="boardNum" useGeneratedKeys="true">
   			INSERT INTO QNA_TBL (BOARD_TITLE, BOARD_CONTENTS, BOARD_DATE, BOARD_HIT, USER_NAME, BOARD_REF, BOARD_STEP, BOARD_DEPTH) 
-  			VALUES (#{boardTitle}, #{boardContents}, NOW(), 0, 'test', #{boardNum}, 0, 0)
+  			VALUES (#{boardTitle}, #{boardContents}, NOW(), 0, #{username}, #{boardNum}, 0, 0)
   		</insert>
   		
   		<update id="refUpdate" parameterType="BoardVO">

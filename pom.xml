@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.4</version>
+		<version>3.4.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.winter</groupId>
-	<artifactId>GDJ89_SpringBoot_Maven</artifactId>
+	<groupId>com.woojin</groupId>
+	<artifactId>WJ_SpringBoot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>GDJ89_SpringBoot_Maven</name>
+	<name>WJ_SpringBoot</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
