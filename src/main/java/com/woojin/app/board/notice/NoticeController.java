@@ -10,9 +10,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.woojin.app.board.BoardVO;
@@ -22,7 +25,7 @@ import com.woojin.app.user.UserVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping(value = "/notice/*")
 public class NoticeController {
 	
@@ -38,14 +41,11 @@ public class NoticeController {
 	}
 	
 	@GetMapping("list")
-	public String getList(Model model, Pager pager) throws Exception{
+	public List<BoardVO> getList(Pager pager, @RequestParam(name = "page") Long page, @PathVariable("kind") String kind, @PathVariable("search") String search) throws Exception{
 		
 		List<BoardVO> ar = noticeService.getList(pager);
 		
-		model.addAttribute("list", ar);
-		model.addAttribute("pager", pager);
-		
-		return "/board/list";
+		return ar;
 	}
 	
 	@GetMapping("detail")
@@ -64,11 +64,7 @@ public class NoticeController {
 		
 		return "redirect:./list";
 	}
-	
-	@GetMapping("add")
-	public String add() throws Exception{
-		return "board/add";
-	}
+
 	
 	@PostMapping("update")
 	public String update(BoardVO boardVO) throws Exception{

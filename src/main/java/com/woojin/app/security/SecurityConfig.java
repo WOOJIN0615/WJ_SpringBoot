@@ -1,5 +1,7 @@
 package com.woojin.app.security;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +16,9 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.session.SessionManagementFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.woojin.app.user.UserService;
 import com.woojin.app.user.UserSocialService;
@@ -56,7 +61,7 @@ public class SecurityConfig {
 		
 		//다른 서버에서 오는 것을 허용
 		//CORS 허용, Filter에서 사용 가능
-		security.cors(cors-> cors.disable())
+		security.cors(cors-> cors.configurationSource(get()))
 		.csrf(csrf-> csrf.disable())
 		//권한 적용
 		.authorizeHttpRequests(authorizeRequest->{
@@ -122,5 +127,14 @@ public class SecurityConfig {
 		return security.build();
 	}
 	
+	CorsConfigurationSource get() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOriginPatterns(List.of("http://192.168.200.19:5501"));
+		configuration.setAllowedMethods(List.of("GET", "POST", "SET", "DELETE", "PATCH", "OPTIONS"));
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		
+		return source;
+	}
 
 }
