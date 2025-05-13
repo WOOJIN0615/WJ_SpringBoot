@@ -1,6 +1,8 @@
 package com.woojin.app.board.notice;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.woojin.app.board.BoardVO;
@@ -22,7 +26,7 @@ import com.woojin.app.user.UserVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping(value = "/notice/*")
 public class NoticeController {
 	
@@ -37,23 +41,30 @@ public class NoticeController {
 		return this.name;
 	}
 	
+
 	@GetMapping("list")
-	public String getList(Model model, Pager pager) throws Exception{
+	public Map<String, Object> getList(Model model, Pager pager) throws Exception{
 		
 		List<BoardVO> ar = noticeService.getList(pager);
+		
 		
 		model.addAttribute("list", ar);
 		model.addAttribute("pager", pager);
 		
-		return "board/list";
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("ar", ar);
+		map.put("pager", pager);
+		
+		return map;
 	}
 	
 	@GetMapping("detail")
-	public String getDetail(Model model, BoardVO boardVO) throws Exception{
+	public BoardVO getDetail(Model model, BoardVO boardVO) throws Exception{
 		boardVO = noticeService.getDetail(boardVO);
 		model.addAttribute("dto", boardVO);
 		
-		return "board/detail";
+		return boardVO;
 	}
 	
 	@PostMapping("add")
