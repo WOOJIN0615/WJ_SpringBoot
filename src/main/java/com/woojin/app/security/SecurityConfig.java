@@ -58,9 +58,9 @@ public class SecurityConfig {
 		//권한 적용
 		.authorizeHttpRequests(authorizeRequest->{
 			authorizeRequest
-			.requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN")
-			.requestMatchers("/user/myPage", "/user/update", "/user/logout").authenticated()
-			.requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")
+//			.requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN")
+//			.requestMatchers("/user/myPage", "/user/update", "/user/logout").authenticated()
+//			.requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")
 			.anyRequest().permitAll();
 		})
 		
