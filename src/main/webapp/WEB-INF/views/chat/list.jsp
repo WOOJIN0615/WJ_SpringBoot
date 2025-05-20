@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>   
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <c:import url="/WEB-INF/views/templates/header.jsp"></c:import>
-<sec:authentication property="principal" var="user"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js" integrity="sha512-1QvjE7BtotQjkq8PxLeF6P46gEpBRXuskzIVgjFpekzFVF4yjRgrQvTG1MTOJ3yQgvTteKAcO7DSZI92+u/yZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -21,29 +21,31 @@
 					
 					<h1>Chat List</h1>
 							<div class="table-responsive">
-								<table class="table table-bordered" id="dataTable" width="10%"
-								cellspacing="0">
-								<tbody>
-									<c:forEach items="${list}" var="l">
-										<tr>
-											<td>${l.username}</td>
-											<td>${l.name}</td>
-											<td>	                                
-												<c:if test="${not empty l.sns}">
-												<img class="img-profile rounded-circle" src="${l.fileName}" style="width: 25px; height: 25px;">
-												</c:if>
-												<c:if test="${empty l.sns}">
-													<img class="img-profile rounded-circle"
-														src="/files/user/${l.fileName}"  style="width: 25px; height: 25px;">
-												</c:if>
-										</td>
-										<td>
-											<button data-receiver-name="${l.username}" style="width: 25px; height: 25px;" class="receiver-name btn ${l.status?'btn-success':'btn-danger'} btn-circle" data-toggle="modal" data-target="#chat"></button>
-										</td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
+								<table class="table table-bordered" id="dataTable" width="100%"
+									cellspacing="0">
+									<tbody>
+										<c:forEach items="${list}" var="vo">
+											<tr>
+												<td>${vo.username}</td>
+												<td>${vo.name}</td>
+												<td>
+													<div class="dropdown-list-image mr-3">
+														<img width="30" height="30" class="rounded-circle" src="/files/user/${vo.fileName}"
+															alt="...">
+														<div class="status-indicator bg-warning"></div>
+													</div>
+												</td>
+												<td>
+													<div style="width:15px; height:15px">
+														<span data-receiver-name="${vo.username}" class="receiver-name btn ${vo.status?'btn-primary':'btn-danger'} btn-circle" data-toggle="modal" data-target="#chat"></span>
+													</div>
+												</td>
+												
+											</tr>
+										</c:forEach>
+
+									</tbody>
+								</table>
 							</div>					
 					
 			
@@ -60,10 +62,9 @@
 
 	
 	
-	<c:import url="/WEB-INF/views/templates/footer.jsp"></c:import>
 	<!-- Chat Modal -->
-
-	<div class="modal" tabindex="-1" id="chat" data-sender-name="${user.username}">
+	<sec:authentication property="name" var="username"/>
+	<div class="modal" tabindex="-1" id="chat" data-sender-name="${username}">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -88,7 +89,14 @@
 	  </div>
 	</div>
 	
+	<c:import url="/WEB-INF/views/templates/footer.jsp"></c:import>
+	<script type="text/javascript">
+		const socket = new SockJS("/ws/chat")
+		
+		socket.onopen=function(){
+			console.log("jsp socket 연결 완료")
+		}
 	
-	<script src="/js/chat/chat.js"></script>	
+	</script>
 </body>
 </html>
