@@ -16,81 +16,87 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class UserService implements UserDetailsService {
+public class UserService implements UserDetailsService{
 	
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-			UserVO userVO = new UserVO();
-			userVO.setUsername(username);
-			try {
-				userVO = userDAO.detail(userVO);
-				log.info("{}", userVO);
-			} catch (Exception e) {
-				e.printStackTrace();
-				userVO = null;
-			}
-		return userVO;
-	}
-	
-	@Autowired
-	private PasswordEncoder encoder;
 	@Autowired
 	private UserDAO userDAO;
-	@Autowired
-	private FileManager fileManager;
-	@Value("${app.files.base}")
-	private String path;
+	
 	@Value("${menu.user.name}")
 	private String kind;
 	
-	public boolean errorCheck(UserVO userVO, BindingResult result) throws Exception{
-		boolean check = false;
-		
-		check = result.hasErrors();
-		
-		if (!userVO.getPassword().equals(userVO.getPasswordCheck())) {
-			check=true;
-			result.rejectValue("passwordCheck", "NotEqual.password");
-		}
-		
-		UserVO checkVO = userDAO.detail(userVO);
-		if (checkVO != null) {
-			check=true;
-			result.rejectValue("username", "NotEqual.username");
-		}
-		
-		return check;
-	}
+	@Value("${app.files.base}")
+	private String path;
 	
-	public int join(UserVO userVO, MultipartFile attach) throws Exception{		
-		if (attach.equals(null)) {
-			userVO.setFileName(null);
-			userVO.setOriName(null);
-			return userDAO.join(userVO);
-		}else {
-			String fileName = fileManager.fileSave(attach, path.concat(kind));
-			userVO.setFileName(fileName);
-			userVO.setOriName(attach.getOriginalFilename());
-		}
-		userVO.setPassword(encoder.encode(userVO.getPassword()));
-			return userDAO.join(userVO);
-	}
+	@Autowired
+	private FileManager fileManager;
 	
-	public UserVO login(UserVO userVO) throws Exception{
-		userVO = userDAO.detail(userVO);
-		if(userVO != null) {
-			if(userVO.getPassword().equals(userVO.getPassword())) {
-				return userVO;
-			}
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		UserVO userVO = new UserVO();
+		userVO.setUsername(username);
+		
+		log.info("Login : {}", username);
+		try {
+			userVO = userDAO.detail(userVO);
+			System.out.println(userVO.getUsername());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 			userVO = null;
 		}
 		return userVO;
 	}
 	
-	public UserVO myPage(UserVO userVO) throws Exception{
-		userVO = userDAO.detail(userVO);
+	
+	public boolean userErrorCheck(UserVO userVO, BindingResult bindingResult) throws Exception {
+		// return이 true면 검증실패
+		// return이 false면 검증통과
+		boolean check=false;
 		
-		return userVO;
+		check = bindingResult.hasErrors();
+		
+		//password가 일치하는지 검증
+		if(!userVO.getPassword().equals(userVO.getPasswordCheck())) {
+			check=true;
+			bindingResult.rejectValue("passwordCheck", "userVO.password.equal");
+		}
+		
+		//Id 중복 검사
+		UserVO checkVO = userDAO.detail(userVO);
+		if(checkVO != null) {
+			check=true;
+			bindingResult.rejectValue("username", "userVO.username.equal");
+		}
+		
+		return check;
+		
+		
+	} 
+	
+	public int join(UserVO userVO, MultipartFile avatar)throws Exception{
+		
+		String fileName = fileManager.fileSave(path.concat(kind), avatar);
+		userVO.setFileName(fileName);
+		userVO.setOriName(avatar.getOriginalFilename());
+		
+		userVO.setPassword(passwordEncoder.encode(userVO.getPassword()));
+		log.info("JOIN : {}", userVO);
+		return userDAO.join(userVO);
 	}
 	
+	public UserVO detail(UserVO userVO)throws Exception{
+		UserVO result = userDAO.detail(userVO);
+		if(result != null) {
+			if(userVO.getPassword().equals(result.getPassword())) {
+				log.info("{}", result);
+				return result;
+			}
+			result = null;
+		}
+		return result;
+	}
+
 }

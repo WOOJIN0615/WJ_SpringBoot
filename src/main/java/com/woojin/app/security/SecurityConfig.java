@@ -1,113 +1,133 @@
 package com.woojin.app.security;
 
-import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.firewall.DefaultHttpFirewall;
-import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.woojin.app.security.jwt.JwtAuthenticationFilter;
+import com.woojin.app.security.jwt.JwtLoginFilter;
+import com.woojin.app.security.jwt.JwtTokenManager;
 import com.woojin.app.user.UserService;
+import com.woojin.app.user.UserSocialService;
 
 @Configuration
-@EnableWebSecurity //(debug = true)
+@EnableWebSecurity//(debug = true)
 public class SecurityConfig {
 	
-	@Autowired
-	private SecurityLoginSuccessHandler loginHandler;
-	@Autowired
-	private SecurityLoginFailHandler failureHandler;
+
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private UserSocialService userSocialService;
 	
-	@Bean
-	HttpFirewall firewall() {
-		return new DefaultHttpFirewall();
-	}
+	@Autowired
+	private AuthenticationConfiguration authenticationConfiguration;
+	@Autowired
+	private JwtTokenManager jwtTokenManager;
+
 	
-	//정적 자원들을 Securuty에서 제외
+	//정적자원들을 Security에서 제외
 	@Bean
-	WebSecurityCustomizer custom() {
-		
+	WebSecurityCustomizer customizer() {
+		//WebSecurityCustomizer s = ()->{}
+		//return s;
 		return (web)->{
-			web.ignoring().requestMatchers("/css/**", "/js/**", "/images/**", "/vendor/**", "/img/**");
+			web.ignoring()
+			   .requestMatchers("/css/**")
+			   .requestMatchers("/images/**", "/img/**")
+			   .requestMatchers("/js/**")
+			   .requestMatchers("/vendor/**")
+			   ;
 		};
 	}
 	
 	//인증과 권한의 관한 설정
+	
 	@Bean
-	SecurityFilterChain filter(HttpSecurity security) throws Exception {
+	SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		
-		//다른 서버에서 오는 것을 허용
-		//CORS 허용, Filter에서 사용 가능
-		security.cors(cors -> cors.configurationSource(request -> {
-            CorsConfiguration config = new CorsConfiguration();
-            config.setAllowedOrigins(Arrays.asList("*"));
-            config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTION"));
-            config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-            return config;
-        }))
-
-		.csrf(csrf-> csrf.disable())
-		//권한 적용
-		.authorizeHttpRequests(authorizeRequest->{
-			authorizeRequest
-//			.requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN")
-//			.requestMatchers("/user/myPage", "/user/update", "/user/logout").authenticated()
-//			.requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")
-			.anyRequest().permitAll();
-		})
+		httpSecurity
+					/** CORS 허용, Filter에서 사용 가능*/
+					.cors(cors-> cors.configurationSource(this.corsConfigurationSource()))
+					.csrf(csrf-> csrf.disable())
+					
+					/** 권한 적용 **/
+					.authorizeHttpRequests(authorizeRequest->{
+						authorizeRequest
+						.requestMatchers("/notices").authenticated()
+						//.requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN")
+						//.requestMatchers("/user/mypage","/user/update", "/user/logout").authenticated()
+						//.requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")
+						.anyRequest().permitAll()
+						;
+						
+					})
+					
+					/** Form 관련 설정**/
+					.formLogin(formlogin ->{
+						formlogin.disable()
+	
+						;
+					})
+					
+					.sessionManagement(s->{
+						s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+						
+						;
+						
+					})
+					.httpBasic(httpBasic-> httpBasic.disable())
+					
+					
+					
+//					.oauth2Login(oauth2Login->{
+//						oauth2Login
+//						.userInfoEndpoint(use->{
+//							use.userService(userSocialService);
+//						});
+//					})
+//					
+					.addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager(), jwtTokenManager))
+					.addFilter(new JwtLoginFilter(authenticationConfiguration.getAuthenticationManager(), jwtTokenManager))
+					
+					
+					;
 		
-		//Form 관련 설정
-		.formLogin(formLogin ->{
-			formLogin
-			.loginPage("/user/login")
-			//파라미터 이름을 지정할 수 있음.
-			//.usernameParameter("userID")
-			//.passwordParameter("pw")
-			//.defaultSuccessUrl("/")
-			.successHandler(loginHandler)
-			.failureHandler(failureHandler)
-			//.failureUrl("/user/login")
-			.permitAll();
-		})
 		
-		//Logout 관련 설정
-		.logout(logout ->{
-			logout
-			.logoutUrl("/user/logout")
-			.logoutSuccessUrl("/")
-			.invalidateHttpSession(true)
-			.permitAll();
-		})
-		
-		.rememberMe(rememberMe ->{
-			rememberMe
-			.rememberMeParameter("remember-me")
-			.tokenValiditySeconds(60) //사용자 쿠키에 얼마동안 저장할 것인가
-			.key("rememberKey")
-			.userDetailsService(userService)
-			.authenticationSuccessHandler(loginHandler)
-			.useSecureCookie(false);
-		})
-		
-		.sessionManagement(s->{
-			s.invalidSessionUrl("/")
-			.maximumSessions(1)
-			.maxSessionsPreventsLogin(true)
-			.expiredUrl("/");
-			s.sessionFixation().changeSessionId();
-		})
-		
-		;
-		return security.build();
+		return httpSecurity.build();
 	}
+	
+	
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
+		
+		//GET메서드 허용
+		//corsConfiguration.setAllowedOriginPatterns(List.of("http://localhost:5173"));
+		
+		corsConfiguration.setAllowedOrigins(List.of("*"));
+		//corsConfiguration.setAllowCredentials(true);
+		//추가 메서드 허용
+		corsConfiguration.setAllowedMethods(List.of("POST", "DELETE", "PATCH", "PUT", "GET"));
+		
+		corsConfiguration.setAllowedHeaders(List.of("*"));
+		corsConfiguration.setExposedHeaders(List.of("AccessToken", "RefreshToken"));
+		
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", corsConfiguration);
+		return source;
+	}
+	
 	
 
 }

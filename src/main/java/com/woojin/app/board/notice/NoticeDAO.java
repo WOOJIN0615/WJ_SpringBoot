@@ -12,6 +12,4 @@ public interface NoticeDAO extends BoardDAO{
 	
 	public int test(List<BoardVO> ar) throws Exception;
 	
-	public void updateHits(NoticeVO noticeVO) throws Exception;
-	
 }

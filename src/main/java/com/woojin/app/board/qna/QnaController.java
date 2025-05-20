@@ -13,88 +13,69 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.woojin.app.board.BoardFileVO;
 import com.woojin.app.board.BoardVO;
 import com.woojin.app.home.util.Pager;
 
 import lombok.extern.slf4j.Slf4j;
-
 @Slf4j
 @Controller
-@RequestMapping(value = "/qna/*")
+@RequestMapping("/qna/*")
 public class QnaController {
 	
 	@Autowired
-	private QnaService qnaService;
+	private QnaService noticeService;
 	
-	@Value("${menu.board.qna.name}")
+	@Value("${menu.board.notice.name}")
 	private String name;
 	
 	@ModelAttribute("kind")
-	public String getName() throws Exception{
+	public String getName() {
 		return this.name;
 	}
 	
 	@GetMapping("list")
-	public String getList(Model model, Pager pager) throws Exception{
+	public String getList(Pager pager, Model model)throws Exception{
 		
-		List<BoardVO> ar = qnaService.getList(pager);
-		
+		List<BoardVO> ar = noticeService.getList(pager);
 		model.addAttribute("list", ar);
 		model.addAttribute("pager", pager);
 		
-		return "/board/list";
+		return "board/list";
 	}
 	
 	@GetMapping("detail")
-	public String getDetail(Model model, BoardVO boardVO) throws Exception{
-		boardVO = qnaService.getDetail(boardVO);
-		model.addAttribute("dto", boardVO);
+	public String getDetail(BoardVO boardVO, Model model)throws Exception{
+		boardVO = noticeService.getDetail(boardVO);
+		
+		if(boardVO == null) {
+			
+		}
+		
+		model.addAttribute("vo", boardVO);
 		
 		return "board/detail";
 	}
 	
+	@GetMapping("add")
+	public String add()throws Exception{
+		return "board/add";
+	}
+	
 	@PostMapping("add")
-	public String add(Model model, BoardVO boardVO,@RequestParam(name = "attaches") MultipartFile[] attaches) throws Exception{
-		int result = qnaService.add(boardVO, attaches);
-		
-		model.addAttribute("vo", boardVO);
+	public String add(QnaVO noticeVO,@RequestParam(name = "attaches") MultipartFile[] attaches)throws Exception{
+		int result = noticeService.add(noticeVO, attaches);
 		
 		return "redirect:./list";
 	}
 	
-	@GetMapping("add")
-	public String add() throws Exception{
-		return "board/add";
-	}
-	
-	@PostMapping("update")
-	public String update(BoardVO boardVO) throws Exception{
-		int result = qnaService.update(boardVO);
-		return "redirect:./detail?boardNum="+boardVO.getBoardNum();
-	}
-	
-	@GetMapping("update")
-	public String update(Model model, BoardVO boardVO) throws Exception{
-		boardVO = qnaService.getDetail(boardVO);
-		model.addAttribute("dto", boardVO);
-		return "board/update";
-	}
-	
-	@GetMapping("delete")
-	public String delete(Model model, BoardVO boardVO) throws Exception{
-		int result = qnaService.delete(boardVO);
-		String path="";
-		String s = "삭제 실패";
-		if (result > 0) {
-			s="삭제 성공";
-			path = "list";
-		}
-		model.addAttribute("path", path);
-		model.addAttribute("result", s);
+	@GetMapping("fileDown")
+	public String getFileDetail(BoardFileVO boardFileVO, Model model)throws Exception{
+		boardFileVO = noticeService.getFileDetail(boardFileVO);
 		
-		return "commons/result";
+		model.addAttribute("fileVO", boardFileVO);
+		
+		return "fileDownView";
 	}
-	
 
-
-}
+}	

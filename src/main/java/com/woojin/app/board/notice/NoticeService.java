@@ -16,7 +16,7 @@ import com.woojin.app.home.util.Pager;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class NoticeService implements BoardService {
+public class NoticeService implements BoardService{
 	
 	@Autowired
 	private NoticeDAO noticeDAO;
@@ -32,57 +32,58 @@ public class NoticeService implements BoardService {
 
 	@Override
 	public List<BoardVO> getList(Pager pager) throws Exception {
-		Long totalCount = noticeDAO.getTotalCount(pager);
-		System.out.println(totalCount);
-		pager.make(totalCount);
+		// TODO Auto-generated method stub
+		pager.make(noticeDAO.getTotalCount(pager));
 		pager.makeNum();
-		List<BoardVO> ar = noticeDAO.getList(pager);
+		List<BoardVO> ar = noticeDAO.getList(pager); 
 		return ar;
 	}
 
 	@Override
 	public BoardVO getDetail(BoardVO boardVO) throws Exception {
-		boardVO = noticeDAO.getDetail(boardVO);
-		return boardVO;
+		// TODO Auto-generated method stub
+		return noticeDAO.getDetail(boardVO);
 	}
 
+	
 	@Override
-	public int add(BoardVO boardVO, MultipartFile[] attaches) throws Exception {		
+	public int add(BoardVO boardVO, MultipartFile [] multipartFiles) throws Exception {
+		// TODO Auto-generated method stub
+		
+		
 		int result = noticeDAO.add(boardVO);
+		
+		
 		//파일을 HDD에 저장
-		if (attaches != null) {
-			for (MultipartFile attach : attaches) {
-				if (attach.isEmpty()) {
+		if(multipartFiles != null) {
+			for(MultipartFile f:multipartFiles) {
+				if(f.isEmpty()) {
 					continue;
 				}
 				
-				String fileName=fileManager.fileSave(attach, path.concat(kind));
+				String fileName = fileManager.fileSave(path.concat(kind), f);
+				//저장된 파일명을 DB에 저장
 				BoardFileVO boardFileVO = new BoardFileVO();
-				
 				boardFileVO.setFileName(fileName);
-				boardFileVO.setOldName(attach.getOriginalFilename());
+				boardFileVO.setOldName(f.getOriginalFilename());
 				boardFileVO.setBoardNum(boardVO.getBoardNum());
 				
-				result=noticeDAO.addFile(boardFileVO);
+				result = noticeDAO.addFile(boardFileVO);
+				
 			}
 		}
 		
-		//저장된 파일명을 DB에 저장
+		
 		
 		return result;
 	}
-
+	
 	@Override
-	public int update(BoardVO boardVO) throws Exception {
-			int result = noticeDAO.update(boardVO);
-		return result;
-	}
-
-	@Override
-	public int delete(BoardVO boardVO) throws Exception {
-			int result = noticeDAO.delete(boardVO);
-		return result;
+	public BoardFileVO getFileDetail(BoardFileVO boardFileVO) throws Exception {
+		// TODO Auto-generated method stub
+		return noticeDAO.getFileDetail(boardFileVO);
 	}
 	
 	
+
 }

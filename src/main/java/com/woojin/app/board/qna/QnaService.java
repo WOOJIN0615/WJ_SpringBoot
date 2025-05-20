@@ -16,7 +16,7 @@ import com.woojin.app.home.util.Pager;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class QnaService implements BoardService {
+public class QnaService implements BoardService{
 	
 	@Autowired
 	private QnaDAO qnaDAO;
@@ -24,7 +24,7 @@ public class QnaService implements BoardService {
 	@Autowired
 	private FileManager fileManager;
 	
-	@Value("${menu.board.qna.name}")
+	@Value("${menu.board.notice.name}")
 	private String kind;
 	
 	@Value("${app.files.base}")
@@ -32,59 +32,54 @@ public class QnaService implements BoardService {
 
 	@Override
 	public List<BoardVO> getList(Pager pager) throws Exception {
-		Long totalCount = qnaDAO.getTotalCount(pager);
-		System.out.println(totalCount);
-		pager.make(totalCount);
+		// TODO Auto-generated method stub
+		pager.make(qnaDAO.getTotalCount(pager));
 		pager.makeNum();
-		List<BoardVO> ar = qnaDAO.getList(pager);
+		List<BoardVO> ar = qnaDAO.getList(pager); 
 		return ar;
 	}
 
 	@Override
 	public BoardVO getDetail(BoardVO boardVO) throws Exception {
-		boardVO = qnaDAO.getDetail(boardVO);
-		return boardVO;
+		// TODO Auto-generated method stub
+		return qnaDAO.getDetail(boardVO);
 	}
 
 	@Override
-	public int add(BoardVO boardVO, MultipartFile[] attaches) throws Exception {		
+	public int add(BoardVO boardVO, MultipartFile [] multipartFiles) throws Exception {
+		// TODO Auto-generated method stub
 		int result = qnaDAO.add(boardVO);
 		result = qnaDAO.refUpdate(boardVO);
 		
 		//파일을 HDD에 저장
-		if (attaches != null) {
-			for (MultipartFile attach : attaches) {
-				if (attach.isEmpty()) {
+		if(multipartFiles != null) {
+			for(MultipartFile f:multipartFiles) {
+				if(f.isEmpty()) {
 					continue;
 				}
 				
-				String fileName=fileManager.fileSave(attach, path.concat(kind));
+				String fileName = fileManager.fileSave(path.concat(kind), f);
+				//저장된 파일명을 DB에 저장
 				BoardFileVO boardFileVO = new BoardFileVO();
-				
 				boardFileVO.setFileName(fileName);
-				boardFileVO.setOldName(attach.getOriginalFilename());
+				boardFileVO.setOldName(f.getOriginalFilename());
 				boardFileVO.setBoardNum(boardVO.getBoardNum());
 				
-				qnaDAO.addFile(boardFileVO);
+				result = qnaDAO.addFile(boardFileVO);
 			}
 		}
 		
-		//저장된 파일명을 DB에 저장
+		
 		
 		return result;
 	}
-
+	
 	@Override
-	public int update(BoardVO boardVO) throws Exception {
-			int result = qnaDAO.update(boardVO);
-		return result;
-	}
-
-	@Override
-	public int delete(BoardVO boardVO) throws Exception {
-			int result = qnaDAO.delete(boardVO);
-		return result;
+	public BoardFileVO getFileDetail(BoardFileVO boardFileVO) throws Exception {
+		// TODO Auto-generated method stub
+		return qnaDAO.getFileDetail(boardFileVO);
 	}
 	
 	
+
 }
