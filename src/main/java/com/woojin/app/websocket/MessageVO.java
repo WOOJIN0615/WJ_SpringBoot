@@ -14,7 +14,7 @@ public class MessageVO {
 	private String sender;
 	private String receiver;
 	private String body;
-	private String date;
+	private String chatDate;
 	private String status;
 	private boolean readStatus;
 }

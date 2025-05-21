@@ -26,8 +26,8 @@ public class ChatHandler implements WebSocketHandler {
 		// TODO Auto-generated method stub
 		log.info("WebSocket 연결 확인");
 		list.add(session);
-		session.getId();
-		log.info("ID : {}", session.getPrincipal().getName());
+		map.put(session.getPrincipal().getName(), session);
+		log.info("ID : {}", session.getPrincipal());
 		
 	}
 
