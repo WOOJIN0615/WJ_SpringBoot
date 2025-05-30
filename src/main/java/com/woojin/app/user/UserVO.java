@@ -1,21 +1,14 @@
 package com.woojin.app.user;
 
-
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -23,61 +16,37 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class UserVO implements UserDetails, OAuth2User {
+public class UserVO implements UserDetails {
 	
-	//UserDetails : getusername, getpassword, getAuthorites
-	
-	@NotBlank(groups = JoinGroup.class)
 	private String username;
-	@Size(min = 8, max = 16)
-	@NotBlank(groups = JoinGroup.class)
 	private String password;
-	private String passwordCheck;
-	@NotBlank(groups = {UpdateGroup.class, JoinGroup.class})
 	private String name;
-	@NotBlank(groups = {UpdateGroup.class, JoinGroup.class})
-	private String phone;
-	@Email(groups = {UpdateGroup.class, JoinGroup.class})
 	private String email;
-	@Past(groups = {UpdateGroup.class, JoinGroup.class})
-	private Date birth;
+	private String phone;
+	private String birth;
 	private String fileName;
 	private String oriName;
-	
 	private boolean accountNonExpired;
 	private boolean accountNonLocked;
 	private boolean credentialsNonExpired;
 	private boolean enabled;
+	private String sns;
+	private Date createdAt;
+	private String position;
+	private String parent;
+	private Long departmentId;
 	
 	private List<RoleVO> list;
 	
-	//OAuth2User////////////////////////////////////////////////////////////////
-	
-	private Map<String, Object> attributes;
-	
-	private String accessToken;
-	
-	private String sns;
-	
-	//OAuth2User////////////////////////////////////////////////////////////////
-
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		//ROLE_NAME을 리턴
+		// TODO Auto-generated method stub
 		List<GrantedAuthority> ar = new ArrayList<>();
 		
-		for (RoleVO roleVO:this.list) {
+		for (RoleVO roleVO : this.list) {
 			GrantedAuthority g = new SimpleGrantedAuthority(roleVO.getRoleName());
-				ar.add(g);
+			ar.add(g);
 		}
 		return ar;
 	}
-
-	//pw가 틀렸을 경우 - BadCredentialException : 자격 증명에 실패하였습니다.
-	//id가 틀렸을 경우 - InternalAuthenticationServiceException
-
-	
-	
-	
-	
 }

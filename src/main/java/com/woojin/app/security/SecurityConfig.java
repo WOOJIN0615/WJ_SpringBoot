@@ -32,8 +32,6 @@ public class SecurityConfig {
 	@Autowired
 	private UserService userService;
 	@Autowired
-	private UserSocialService userSocial;
-	@Autowired
 	private SecurityLogoutSuccessHandler logoutSuccess;
 	
 	@Bean
@@ -107,13 +105,6 @@ public class SecurityConfig {
 			.maxSessionsPreventsLogin(true)
 			.expiredUrl("/");
 			s.sessionFixation().changeSessionId();
-		})
-		
-		.oauth2Login(oauth2Login ->{
-			oauth2Login
-			.userInfoEndpoint(use->{
-				use.userService(userSocial);
-			});
 		})
 		
 		

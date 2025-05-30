@@ -2,9 +2,11 @@ package com.woojin.app.user;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
-@Getter
 @Setter
+@Getter
+@ToString
 public class RoleVO {
 	
 	private Long roleNum;

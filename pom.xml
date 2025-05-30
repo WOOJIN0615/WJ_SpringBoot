@@ -36,6 +36,12 @@
 		    <artifactId>jakarta.servlet-api</artifactId>
 		    <scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+		    <groupId>io.jsonwebtoken</groupId>
+		    <artifactId>jjwt-api</artifactId>
+		    <version>0.12.6</version>
+		</dependency>
 
 		
 		<dependency>
